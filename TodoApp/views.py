@@ -54,15 +54,18 @@ def items(request, listID=None):
         if itemContent == "":
             appStatus = "Please specify what you need to do."
         else:
-            lastItemId = models.TodoItem.objects.filter(belongingList_id=listID).aggregate(Max('itemId'))['itemId__max']
-            if lastItemId is None:
-                newItemId = 0
+            if itemImportance == "":
+                appStatus = "Please choose a valid importance level."
             else:
-                newItemId = lastItemId + 1
-            models.TodoList.objects.filter(listId=listID).update(todoCount=F('todoCount') + 1)
-            models.TodoItem.objects.create(itemId=newItemId, content=itemContent, done="Nope",
-                                           importance=itemImportance, belongingList_id=listID)
-            appStatus = "New Todo created successfully."
+                lastItemId = models.TodoItem.objects.filter(belongingList_id=listID).aggregate(Max('itemId'))['itemId__max']
+                if lastItemId is None:
+                    newItemId = 0
+                else:
+                    newItemId = lastItemId + 1
+                models.TodoList.objects.filter(listId=listID).update(todoCount=F('todoCount') + 1)
+                models.TodoItem.objects.create(itemId=newItemId, content=itemContent, done="Nope",
+                                               importance=itemImportance, belongingList_id=listID)
+                appStatus = "New Todo created successfully."
 
     elif request.POST["submit"] == "Delete":
         todoId = request.POST['itemID']
@@ -70,7 +73,7 @@ def items(request, listID=None):
             appStatus = "Please choose a valid Todo"
         else:
             try:
-                models.TodoItem.objects.filter(itemId=todoId).delete()
+                models.TodoItem.objects.filter(belongingList_id=listID, itemId=todoId).delete()
                 models.TodoList.objects.filter(listId=listID).update(todoCount=F('todoCount') - 1)
                 appStatus = "Specified Todo deleted successfully."
             except models.TodoList.DoesNotExist:
@@ -83,7 +86,7 @@ def items(request, listID=None):
             appStatus = "Please choose a valid Todo"
         else:
             try:
-                models.TodoItem.objects.filter(itemId=todoId).update(done="Yes!")
+                models.TodoItem.objects.filter(belongingList_id=listID, itemId=todoId).update(done="Yes!")
                 models.TodoList.objects.filter(listId=listID).update(doneCount=F('doneCount') + 1)
                 appStatus = "Specified Todo marked as done successfully."
             except models.TodoList.DoesNotExist:

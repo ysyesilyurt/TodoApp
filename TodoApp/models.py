@@ -12,13 +12,14 @@ class TodoList(models.Model):
     doneCount = models.IntegerField()
     createdWhen = models.DateField(default=timezone.now().strftime("%Y-%m-%d"))
 
-    # __str__
+    def __str__(self):
+        return ' '.join([self.name, str(self.todoCount), str(self.doneCount), str(self.createdWhen)])
 
 
 class TodoItem(models.Model):
     """Model definition for TodoItems"""
 
-    itemId = models.IntegerField(primary_key=True)
+    itemId = models.IntegerField()
     content = models.TextField()
     done = models.TextField()
     importance = models.TextField()
@@ -31,4 +32,5 @@ class TodoItem(models.Model):
 
         ordering = ["itemId"]
 
-    # __str__
+    def __str__(self):
+        return ' '.join([self.itemId, str(self.content), str(self.importance)])
