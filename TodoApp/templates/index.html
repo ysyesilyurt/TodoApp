@@ -6,7 +6,8 @@
 <h3>Create a New TodoList</h3>
 <form action="{{formaction}}" method=POST>
     {% csrf_token %}
-    Name of the List:<br>
+    Name of the List:
+    <br>
     <input type="text" name="listName">
     <br>
     <input type="submit" name="submit" value="Create">
@@ -16,13 +17,14 @@
     <tr><th>Name</th><th>Todo Count</th><th>Done Count</th><th>Creation Date</th></tr>
     {% for lst in todoLists %}
     <tr><td>{{ lst.name }}</td><td>{{ lst.todoCount }}</td><td>{{ lst.doneCount }}</td><td>{{ lst.createdWhen }}</td>
-        <td><a href="/list/{{watcher.wid}}">Logs</a></td>
+        <td><a href="/todolist/{{lst.listId}}">TodoItems</a></td></tr>
     {% endfor %}
 </table>
 <h3>Delete a TodoList</h3>
 <form action="{{formaction}}" method=POST>
     {% csrf_token %}
-    Name of the List:<br>
+    Name of the List:
+    <br>
     <td><select name="listName">
         <option value="" aria-disabled="true">Select A Name</option>
         {% for lst in todoLists %}

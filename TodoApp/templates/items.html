@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block body %}
+{% if status %}
+<b>{{status}}</b>
+{% endif %}
+<h3>Create a New Todo</h3>
+<form action="{{formaction}}" method=POST>
+    {% csrf_token %}
+    What do you need to do:
+    <br>
+    <input type="text" name="itemContent">
+    <br>
+    Importance:
+    <br>
+    <td><select name="itemImportance">
+        <option value="" aria-disabled="true">Select An Importance Level</option>
+            <option> Very Low </option>
+            <option> Low </option>
+            <option> Normal </option>
+            <option> High </option>
+            <option> Very High </option>
+    </select></td>
+    <br>
+    <input type="submit" name="submit" value="Create">
+</form>
+<h2> List of Todo's </h2>
+<table style="width:50%" border="1" cellspacing="0">
+    <tr><th>Todo Id</th><th>Content</th><th>Done</th><th>Importance</th></tr>
+    {% for todo in todos %}
+        <tr><td>{{ todo.itemId }}</td><td>{{ todo.content }}</td><td>{{ todo.done }}</td><td>{{ todo.importance }}</td></tr>
+    {% endfor %}
+</table>
+<h3>Mark a Todo as Done</h3>
+<form action="{{formaction}}" method=POST>
+    {% csrf_token %}
+    Id of Todo:
+    <br>
+    <td><select name="itemID">
+        <option value="" aria-disabled="true">Select An Id</option>
+        {% for todo in todos %}
+            <option> {{ todo.itemId }}</option>
+        {% endfor %}
+    </select></td>
+    <br>
+    <input type="submit" name="submit" value="Mark as Done">
+</form>
+<h3>Delete a Todo</h3>
+<form action="{{formaction}}" method=POST>
+    {% csrf_token %}
+    Id of Todo:
+    <br>
+    <td><select name="itemID">
+        <option value="" aria-disabled="true">Select An Id</option>
+        {% for todo in todos %}
+            <option> {{ todo.itemId }}</option>
+        {% endfor %}
+    </select></td>
+    <br>
+    <input type="submit" name="submit" value="Delete">
+</form>
+{% endblock %}

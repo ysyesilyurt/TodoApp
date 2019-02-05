@@ -1,32 +1,34 @@
 from django.db import models
 from django.utils import timezone
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class TodoList(models.Model):
     """Model definition for TodoLists"""
 
-    # listId = models.IntegerField(unique=True)
+    listId = models.IntegerField(primary_key=True)
     # user can not create 2 TodoLists with the same name
-    name = models.CharField(primary_key=True, max_length=500)
+    name = models.CharField(unique=True, max_length=500)
     todoCount = models.IntegerField()
     doneCount = models.IntegerField()
     createdWhen = models.DateField(default=timezone.now().strftime("%Y-%m-%d"))
+
+    # __str__
 
 
 class TodoItem(models.Model):
     """Model definition for TodoItems"""
 
-    # user can not create 2 TodoItems with the same content
-    content = models.TextField(primary_key=True)
-    done = models.BooleanField()
-    # importance level can be set as any number in range [0,5]
-    importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    itemId = models.IntegerField(primary_key=True)
+    content = models.TextField()
+    done = models.TextField()
+    importance = models.TextField()
 
     # a Many-to-One relationship with TodoList
-    belongingList = models.ForeignKey(TodoList, blank=False, null=False, on_delete="CASCADE", related_name="listName")
+    belongingList = models.ForeignKey(TodoList, blank=False, null=False, on_delete="CASCADE", related_name="todoList")
 
     class Meta:
         """ Meta class for handling the ordering of TodoItems"""
 
-        ordering = ["-importance"]
+        ordering = ["itemId"]
+
+    # __str__
