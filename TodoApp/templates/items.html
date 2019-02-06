@@ -41,6 +41,20 @@
                     <tr><td>{{ todo.itemId }}</td><td>{{ todo.content }}</td><td>{{ todo.done }}</td><td>{{ todo.importance }}</td></tr>
                 {% endfor %}
             </table>
+            <h3>Delete a Todo</h3>
+            <form action="{{formaction}}" method=POST>
+                {% csrf_token %}
+                Id of Todo:
+                <br>
+                <td><select name="itemID">
+                    <option value="" aria-disabled="true">Select An Id</option>
+                    {% for todo in todos %}
+                        <option> {{ todo.itemId }}</option>
+                    {% endfor %}
+                </select></td>
+                <br>
+                <input type="submit" name="submit" value="Delete">
+            </form>
             <h3>Mark a Todo as Done</h3>
             <form action="{{formaction}}" method=POST>
                 {% csrf_token %}
@@ -55,19 +69,19 @@
                 <br>
                 <input type="submit" name="submit" value="Mark as Done">
             </form>
-            <h3>Delete a Todo</h3>
+            <h3>Mark a Done Todo as Undone</h3>
             <form action="{{formaction}}" method=POST>
                 {% csrf_token %}
                 Id of Todo:
                 <br>
                 <td><select name="itemID">
                     <option value="" aria-disabled="true">Select An Id</option>
-                    {% for todo in todos %}
+                    {% for todo in doneTodos %}
                         <option> {{ todo.itemId }}</option>
                     {% endfor %}
                 </select></td>
                 <br>
-                <input type="submit" name="submit" value="Delete">
+                <input type="submit" name="submit" value="Mark as Undone">
             </form>
         </div>
         <br>

@@ -93,5 +93,19 @@ def items(request, listID=None):
                 appStatus = "Marking operation failed. Please make sure that Todo ID" \
                             "exists in current Todo items"
 
+    elif request.POST["submit"] == "Mark as Undone":
+        todoId = request.POST['itemID']
+        if todoId == "":
+            appStatus = "Please choose a valid Todo"
+        else:
+            try:
+                models.TodoItem.objects.filter(belongingList_id=listID, itemId=todoId).update(done="Nope")
+                models.TodoList.objects.filter(listId=listID).update(doneCount=F('doneCount') - 1)
+                appStatus = "Specified Todo marked as undone successfully."
+            except models.TodoList.DoesNotExist:
+                appStatus = "Marking operation failed. Please make sure that Todo ID" \
+                            "exists in current Todo items"
+
     todos = models.TodoItem.objects.filter(belongingList_id=listID)
-    return render(request, "items.html", {"todos": todos, "status": appStatus})
+    doneTodos = models.TodoItem.objects.filter(done="Yes!")
+    return render(request, "items.html", {"todos": todos, "doneTodos": doneTodos , "status": appStatus})
