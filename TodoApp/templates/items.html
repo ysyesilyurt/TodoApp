@@ -1,90 +1,53 @@
-<html>
-    <body>
-        <head>
-          <title> TodoApp </title>
-        </head>
-        <h1 align="center"> TodoApp </h1>
-		<div align="right">
-		{% if request.user.is_authenticated %}
-			User: {{ request.user }} 
-			<a href="/accounts/logout?next=/">Logout</a>
-		{% endif %}
-		</div>
-		<div>
-            {% if status %}
-            <b>{{status}}</b>
-            {% endif %}
-            <h3>Create a New Todo</h3>
-            <form action="{{formaction}}" method=POST>
-                {% csrf_token %}
-                What do you need to do:
-                <br>
-                <input type="text" name="itemContent">
-                <br>
-                Importance:
-                <br>
-                <td><select name="itemImportance">
-                    <option value="" aria-disabled="true">Select An Importance Level</option>
-                        <option> Very Low </option>
-                        <option> Low </option>
-                        <option> Normal </option>
-                        <option> High </option>
-                        <option> Very High </option>
-                </select></td>
-                <br>
-                <input type="submit" name="submit" value="Create">
-            </form>
-            <h2> List of Todo's </h2>
-            <table style="width:50%" border="1" cellspacing="0">
-                <tr><th>Todo Id</th><th>Content</th><th>Done</th><th>Importance</th></tr>
-                {% for todo in todos %}
-                    <tr><td>{{ todo.itemId }}</td><td>{{ todo.content }}</td><td>{{ todo.done }}</td><td>{{ todo.importance }}</td></tr>
-                {% endfor %}
-            </table>
-            <h3>Delete a Todo</h3>
-            <form action="{{formaction}}" method=POST>
-                {% csrf_token %}
-                Id of Todo:
-                <br>
-                <td><select name="itemID">
-                    <option value="" aria-disabled="true">Select An Id</option>
-                    {% for todo in todos %}
-                        <option> {{ todo.itemId }}</option>
-                    {% endfor %}
-                </select></td>
-                <br>
-                <input type="submit" name="submit" value="Delete">
-            </form>
-            <h3>Mark a Todo as Done</h3>
-            <form action="{{formaction}}" method=POST>
-                {% csrf_token %}
-                Id of Todo:
-                <br>
-                <td><select name="itemID">
-                    <option value="" aria-disabled="true">Select An Id</option>
-                    {% for todo in todos %}
-                        <option> {{ todo.itemId }}</option>
-                    {% endfor %}
-                </select></td>
-                <br>
-                <input type="submit" name="submit" value="Mark as Done">
-            </form>
-            <h3>Mark a Done Todo as Undone</h3>
-            <form action="{{formaction}}" method=POST>
-                {% csrf_token %}
-                Id of Todo:
-                <br>
-                <td><select name="itemID">
-                    <option value="" aria-disabled="true">Select An Id</option>
-                    {% for todo in doneTodos %}
-                        <option> {{ todo.itemId }}</option>
-                    {% endfor %}
-                </select></td>
-                <br>
-                <input type="submit" name="submit" value="Mark as Undone">
-            </form>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<head>
+    <link rel="stylesheet" href="../static/stylesheet.css">
+</head>
+{% csrf_token %}
+
+<br>
+<a href="/">Return to Your TodoLists</a>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="todolist not-done">
+             <h1>Todos</h1>
+                    <input type="text" class="form-control add-todo" placeholder="Add todo">
+                    <button id="checkAll" class="btn btn-success">Mark all as done</button>
+                    <button id="deleteAll" class="btn btn-danger">Delete all undone items</button>
+                    <hr>
+                    <ul id="not-done-items" class="list-unstyled">
+                        {% for todo in todos %}
+                            <li class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />{{ todo.content }}</label>
+                            <span class="glyphicon glyphicon-align-justify" style='float: right;'></span>
+                            </div></li>
+                        {% endfor %}
+                    </ul>
+                    <div class="todo-footer">
+                        <strong><span class="count-todos"></span></strong> Items Left
+                    </div>
+            </div>
         </div>
-        <br>
-	    <a href="/">Main page</a>
-    </body>
-</html>
+        <div class="col-md-6">
+            <div class="todolist">
+             <h1>Already Done</h1>
+                <button id="uncheckAllDone" class="btn btn-warning">Mark all as undone</button>
+                <button id="deleteAllDone" class="btn btn-danger">Delete all done items</button>
+                <hr>
+                <ul id="done-items" class="list-unstyled">
+                    {% for todo in doneTodos %}
+                        <li>{{ todo.content }}<button class="btn btn-default btn-xs pull-right  remove-item"><span class="glyphicon glyphicon-remove"></span></button>
+                            <button class="btn btn-default btn-xs pull-right  undone-item"><span class="glyphicon glyphicon-share-alt"></span></button></li>
+                    {% endfor %}
+                </ul>
+                <div class="todo-footer">
+                        <strong><span class="count-doneTodos"></span></strong> Items are Done
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/frontend.js"></script>

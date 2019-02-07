@@ -25,7 +25,7 @@
                 </form>
                 <h2> TodoLists </h2>
                 <table style="width:50%" border="1" cellspacing="0">
-                    <tr><th>Name</th><th>Todo Count</th><th>Done Count</th><th>Creation Date</th></tr>
+                    <tr><th>Name</th><th>Total Todo Count</th><th>Done Todo Count</th><th>Creation Date</th></tr>
                     {% for lst in todoLists %}
                     <tr><td>{{ lst.name }}</td><td>{{ lst.todoCount }}</td><td>{{ lst.doneCount }}</td><td>{{ lst.createdWhen }}</td>
                         <td><a href="/todolist/{{lst.listId}}">TodoItems</a></td></tr>

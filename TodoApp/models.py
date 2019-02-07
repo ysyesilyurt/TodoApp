@@ -19,18 +19,15 @@ class TodoList(models.Model):
 class TodoItem(models.Model):
     """Model definition for TodoItems"""
 
-    itemId = models.IntegerField()
+    # user can not create 2 items with the same content
     content = models.TextField()
-    done = models.TextField()
-    importance = models.TextField()
+    done = models.BooleanField()
 
     # a Many-to-One relationship with TodoList
     belongingList = models.ForeignKey(TodoList, blank=False, null=False, on_delete="CASCADE", related_name="todoList")
 
     class Meta:
-        """ Meta class for handling the ordering of TodoItems"""
-
-        ordering = ["itemId"]
+        unique_together = (("content", "belongingList"),)
 
     def __str__(self):
-        return ' '.join([self.itemId, str(self.content), str(self.importance)])
+        return ' '.join([self.content, str(self.done)])
