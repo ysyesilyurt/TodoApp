@@ -172,9 +172,13 @@ def signup(request):
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-        user = User.objects.create_user(username, email, password)
-        login(request, user)
-        return redirect('index')
+        try:
+            user = User.objects.create_user(username, email, password)
+            login(request, user)
+            return redirect('index')
+        except IntegrityError:
+            appStatus = "Oops! It seems like this username is taken, please choose another username."
+            return render(request, 'signup.html', {'status': appStatus})
     else:
         return render(request, 'signup.html')
 
