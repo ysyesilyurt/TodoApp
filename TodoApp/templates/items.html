@@ -3,19 +3,30 @@
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
 <head>
-    <link rel="stylesheet" href="../static/stylesheet.css">
+    <link rel="stylesheet" href="../static/sheetTodos.css">
+    <title> TodoApp </title>
 </head>
+
 {% csrf_token %}
 
-<br>
-<a href="/">Return to Your TodoLists</a>
+<p style="text-align:left;">
+<a href="/" class="btn btn-primary" style="margin-left: 10px; margin-top: 10px">Return to your TodoLists</a>
+<span style="float:right; margin-right: 10px; margin-top: 5px">
+    {% if request.user.is_authenticated %}
+        Current User: {{ request.user }}
+        <br>
+        <a href="/accounts/logout?next=/" class="btn btn-danger" style="float: right; margin-top: 10px">Logout</a>
+    {% endif %}
+</span>
+</p>
+
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <div class="container">
     <div class="row">
         <div class="col-md-6">
             <div class="todolist not-done">
              <h1>Todos</h1>
-                    <input type="text" class="form-control add-todo" placeholder="Add todo">
+                    <input type="text" class="form-control add-todo" placeholder="Add a new Todo">
                     <button id="checkAll" class="btn btn-success">Mark all as done</button>
                     <button id="deleteAll" class="btn btn-danger">Delete all undone items</button>
                     <hr>
@@ -50,4 +61,8 @@
         </div>
     </div>
 </div>
-<script src="../static/frontend.js"></script>
+<script src="../static/todos.js"></script>
+
+<div id="footer">
+    <p style="text-align: center;"> © 2019 by ysyesilyurt <a href="https://github.com/ysyesilyurt/TodoApp"> Original repository</a></p>
+</div>

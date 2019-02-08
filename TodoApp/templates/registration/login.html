@@ -1,26 +1,32 @@
-<html>
-    <body>
-        <head>
-          <title> TodoApp </title>
-        </head>
-        <h1 align="center"> TodoApp </h1>
-		<div align="right">
-		{% if request.user.is_authenticated %}
-			User: {{ request.user }}
-			<a href="/accounts/logout?next=/">Logout</a>
-		{% endif %}
-		</div>
-		<div>
-            <h2> Login Page </h2>
-            <form method="post">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<head>
+    <link rel="stylesheet" href="../../static/login.css">
+    <title> TodoApp </title>
+</head>
+
+<div class="sidenav">
+    <div class="login-main-text">
+        <h2>TodoApp<br> Login Page</h2>
+    </div>
+</div>
+<div class="main">
+ <div class="col-md-6 col-sm-12">
+    <div class="login-form">
+       <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="hidden" name="next" value="{{ next }}" />
-            <input type="submit" name="submit" value="Login"/>
-            </form>
-            <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-        </div>
-        <br>
-	    <a href="/">Main page</a>
-    </body>
-</html>
+           <input type="hidden" name="next" value="{{ next }}" />
+           <input style="margin-left: 75px" type="submit" name="submit" value="Login" class="btn btn-black"/>
+       </form>
+        <p>Dont have an account? <a href="/signup">Signup from here!</a></p>
+        <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    </div>
+ </div>
+</div>
+
+<div id="footer">
+    <p style="text-align: center;"> © 2019 by ysyesilyurt <a href="https://github.com/ysyesilyurt/TodoApp"> Original repository</a></p>
+</div>

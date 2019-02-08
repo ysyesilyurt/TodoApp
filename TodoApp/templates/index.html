@@ -1,50 +1,88 @@
-<html>
-    <body>
-        <head>
-          <title> TodoApp </title>
-        </head>
-        <h1 align="center"> TodoApp </h1>
-		<div align="right">
-		{% if request.user.is_authenticated %}
-			User: {{ request.user }} 
-			<a href="/accounts/logout?next=/">Logout</a>
-		{% endif %}
-		</div>
-		<div>
-            {% if status %}
-            <b>{{status}}</b>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<head>
+    <link rel="stylesheet" href="../static/sheetTodolists.css">
+    <title> TodoApp </title>
+</head>
+
+{% csrf_token %}
+
+<div id="header">
+    <span style="float: left; width: 34%; text-align: left;">
+            <p class="btn btn-info" style="margin-left: 10px; margin-top: 10px">Version 1.0</p>
+    </span>
+    <h1 style="float: left; width: 33%; text-align: center;">TodoApp</h1>
+    <p style="float: left; width: 33%; text-align: right;">
+        <span style="float:right; margin-right: 10px; margin-top: 5px">
+            {% if request.user.is_authenticated %}
+                Current User: {{ request.user }}
+                <br>
+                <a href="/accounts/logout?next=/" class="btn btn-danger" style="margin-left: 10px; margin-top: 10px">Logout</a>
             {% endif %}
-            <h3>Create a New TodoList</h3>
-            <form action="{{formaction}}" method=POST>
-                {% csrf_token %}
-                Name of the List:
-                <br>
-                <input type="text" name="listName">
-                <br>
-                <input type="submit" name="submit" value="Create">
-                </form>
-                <h2> TodoLists </h2>
-                <table style="width:50%" border="1" cellspacing="0">
-                    <tr><th>Name</th><th>Total Todo Count</th><th>Done Todo Count</th><th>Creation Date</th></tr>
-                    {% for lst in todoLists %}
-                    <tr><td>{{ lst.name }}</td><td>{{ lst.todoCount }}</td><td>{{ lst.doneCount }}</td><td>{{ lst.createdWhen }}</td>
-                        <td><a href="/todolist/{{lst.listId}}">TodoItems</a></td></tr>
-                    {% endfor %}
-                </table>
-                <h3>Delete a TodoList</h3>
-                <form action="{{formaction}}" method=POST>
-                    {% csrf_token %}
-                    Name of the List:
-                    <br>
-                    <td><select name="listName">
-                        <option value="" aria-disabled="true">Select A Name</option>
-                        {% for lst in todoLists %}
-                            <option> {{ lst.name }}</option>
-                        {% endfor %}
-                    </select></td>
-                    <br>
-                    <input type="submit" name="submit" value="Delete">
-                </form>
-        </div>
-    </body>
-</html>
+        </span>
+    </p>
+</div>
+
+<div class="container">
+    <div class="row clearfix">
+    	<div class="col-md-12 table-responsive">
+			<table class="table table-bordered table-hover table-sortable" id="tab_logic">
+				<thead>
+					<tr>
+						<th class="text-center">
+							Todo List Name
+						</th>
+						<th class="text-center">
+							Total Todo Count
+						</th>
+						<th class="text-center">
+							Done Todo Count
+						</th>
+    					<th class="text-center">
+							Creation Date
+						</th>
+        				<th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+						</th>
+                        <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+						</th>
+					</tr>
+				</thead>
+				<tbody id="todolist-body">
+                     {% for lst in todoLists %}
+                            <tr><td>{{ lst.name }}</td><td>{{ lst.todoCount }}</td><td>{{ lst.doneCount }}</td><td>{{ lst.createdWhen }}</td>
+                                <td data-name="del"><button name="del0" class='btn btn-danger glyphicon glyphicon-remove remove-item'></button></td>
+                                <td data-name="goTodos"><a href="/todolist/{{lst.listId}}" class="btn btn-primary">Go to its Todos</a></td></tr>
+                     {% endfor %}
+				</tbody>
+                <tbody>
+                    <tr id="todolist-input-entry">
+                        <td data-name="List Name">
+                            <input type="text" class="form-control add-todo-list" placeholder="Add a New Todo List">
+                        </td>
+						<td data-name="Total Todo Count">
+						    <input type="text" name='todoCount' placeholder='0' class="form-control" readonly/>
+						</td>
+						<td data-name="Done Todo Count">
+						    <input type="text" name='doneCount' placeholder='0' class="form-control" readonly/>
+						</td>
+    					<td data-name="Creation Date">
+						    <input type="text" name='creationDate' placeholder='Today' class="form-control" readonly/>
+						</td>
+					</tr>
+                </tbody>
+			</table>
+            <div class="todolist-footer">
+                <strong><span class="count-todolists"></span></strong> TodoLists exist
+            </div>
+		</div>
+	</div>
+</div>
+<script src="../static/todoLists.js"></script>
+
+<div id="footer">
+    <p style="text-align: center;"> © 2019 by ysyesilyurt <a href="https://github.com/ysyesilyurt/TodoApp"> Original repository</a></p>
+</div>

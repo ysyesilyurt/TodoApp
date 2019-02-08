@@ -1,5 +1,7 @@
 $("#not-done-items").sortable();
 $("#not-done-items").disableSelection();
+$("#done-items").sortable();
+$("#done-items").disableSelection();
 
 countTodos();
 countDoneTodos();
@@ -27,7 +29,7 @@ $("#deleteAllDone").click(function(){
 //create todo
 $('.add-todo').on('keypress',function (evnt) {
     // Stop form from submitting normally
-    evnt.preventDefault
+    evnt.preventDefault;
     // Create item only if user pressed to 'enter'
     if (evnt.which == 13) {
         if($(this).val() != ''){
