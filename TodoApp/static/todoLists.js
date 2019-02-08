@@ -3,34 +3,29 @@ $("#todolist-body").disableSelection();
 
 countTodoLists();
 
-//create new todoList
+// create new TodoLists after entering the list name
 $('.add-todo-list').focus();
 $('.add-todo-list').on('keypress',function (evnt) {
-    // Stop form from submitting normally
     evnt.preventDefault;
-    // Create item only if user pressed to 'enter'
     if (evnt.which == 13) {
         if($(this).val() != ''){
             var todo = $(this).val();
             createTodoList(todo);
         }
-        else{
-           // some validation
-        }
     }
 });
 
+// delete a TodoList
 $('.table').on('click','.remove-item',function(){
     removeItem(this);
 });
 
-// count tasks
+// count TodoLists
 function countTodoLists(){
     var count = $("#todolist-body tr").length;
     $('.count-todolists').html(count);
 }
 
-//create task
 function createTodoList(text){
     $.post(window.location.pathname,
             { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
@@ -51,7 +46,6 @@ function createTodoList(text){
 			});
 }
 
-//remove done task from list
 function removeItem(element){
     var removedItem = $(element).parent().parent().find("td:first").text();
     $.post(window.location.pathname,

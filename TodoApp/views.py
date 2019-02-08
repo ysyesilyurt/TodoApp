@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -7,20 +9,6 @@ from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from . import models
-
-import json
-
-
-def signup(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        user = User.objects.create_user(username, email, password)
-        login(request, user)
-        return redirect('index')
-    else:
-        return render(request, 'signup.html')
 
 
 @login_required
@@ -177,6 +165,18 @@ def items(request, listID=None):
     todos = models.TodoItem.objects.filter(belongingList_id=listID, done=False)
     doneTodos = models.TodoItem.objects.filter(belongingList_id=listID, done=True)
     return responseTodos(result, appStatus, todos, doneTodos)
+
+
+def signup(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        user = User.objects.create_user(username, email, password)
+        login(request, user)
+        return redirect('index')
+    else:
+        return render(request, 'signup.html')
 
 
 # Return a TodoList request result in JSON HttpResponse

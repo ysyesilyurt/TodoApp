@@ -7,14 +7,13 @@ from django.utils import timezone
 class TodoList(models.Model):
     """Model definition for TodoLists"""
 
-    # user can not create 2 TodoLists with the same name
-    name = models.TextField()
     listId = models.IntegerField(primary_key=True)
+    name = models.TextField()
     todoCount = models.IntegerField()
     doneCount = models.IntegerField()
     createdWhen = models.DateField(default=timezone.now().strftime("%Y-%m-%d"))
 
-    # a Many-to-One relationship with user
+    # a Many-to-One relationship with User
     owner = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="owner")
 
     class Meta:

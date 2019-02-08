@@ -11,22 +11,22 @@ $("#checkAll").click(function(){
     allDone("Mark all as Done");
 });
 
-// all done btn
+// all undone btn
 $("#uncheckAllDone").click(function(){
     allDone("Mark all as Undone");
 });
 
-// all done delete btn
+// delete all btn
 $("#deleteAll").click(function(){
     deleteAll("Delete all Undone");
 });
 
-// all done delete btn
+// delete all undone btn
 $("#deleteAllDone").click(function(){
     deleteAll("Delete all Done");
 });
 
-//create todo
+// create new TodoItems after entering the content
 $('.add-todo').on('keypress',function (evnt) {
     // Stop form from submitting normally
     evnt.preventDefault;
@@ -35,9 +35,6 @@ $('.add-todo').on('keypress',function (evnt) {
         if($(this).val() != ''){
             var todo = $(this).val();
             createTodo(todo);
-        }
-        else{
-           // some validation
         }
     }
 });
@@ -63,10 +60,6 @@ $('.todolist').on('click','.undone-item',function(){
     undoneItem(this);
 });
 
-//edit task from "undone"
-$('.todolist').on('click','.edit-item',function(){
-    editItem(this);
-});
 
 // count done tasks
 function countDoneTodos(){
@@ -81,7 +74,6 @@ function countTodos(){
     $('.count-todos').html(count);
 }
 
-//create task
 function createTodo(text){
     $.post(window.location.pathname,
             { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
@@ -107,7 +99,6 @@ function createTodo(text){
 			});
 }
 
-//mark task as done
 function done(doneItem){
     $.post(window.location.pathname,
         { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
@@ -128,7 +119,6 @@ function done(doneItem){
 			});
 }
 
-//mark all tasks as done
 function allDone(allWhat){
     $.post(window.location.pathname,
         { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
@@ -181,7 +171,6 @@ function allDone(allWhat){
         );
 }
 
-//mark all tasks as done
 function deleteAll(deleteWhat){
     $.post(window.location.pathname,
         { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
@@ -210,7 +199,6 @@ function deleteAll(deleteWhat){
         );
 }
 
-//remove done task from list
 function removeItem(element){
     var removedItem = $(element).parent().text().replace(/\n/g, '');
     $.post(window.location.pathname,
@@ -230,32 +218,7 @@ function removeItem(element){
           );
 }
 
-//undone task from list
 function undoneItem(element){
-    var undonedItem = $(element).parent().text().replace(/\n/g, '');
-    $.post(window.location.pathname,
-            {   csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
-                'submit': "Undone",
-                'itemContent': undonedItem},
-                function (data) {
-                    if (data.result == "Fail")
-                        alert(data.appStatus);
-                    else
-                    {
-                        var markup = '<li class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />'+ undonedItem +'</label>' +
-                            '<span class="glyphicon glyphicon-align-justify" style="float: right;"></span></div></li>';
-                        $('#not-done-items').append(markup);
-                        $(element).parent().remove();
-                        countTodos();
-                        countDoneTodos();
-                    }
-                }
-          );
-}
-
-//edit task in list
-function editItem(element){
-
     var undonedItem = $(element).parent().text().replace(/\n/g, '');
     $.post(window.location.pathname,
             {   csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
