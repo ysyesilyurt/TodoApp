@@ -13,7 +13,7 @@ from . import models
 
 @login_required
 def index(request):
-    """Home page that displays active TodoLists and their related information."""
+    """Home page view that displays active TodoLists and their related information along with available operations."""
 
     result = ""
     appStatus = ""
@@ -55,6 +55,16 @@ def index(request):
                             "exists in current TodoLists"
                 result = "Fail"
 
+    elif request.POST["submit"] == "Edit":
+        listName = request.POST['listName']
+        newName = request.POST['newName']
+        try:
+            models.TodoList.objects.filter(owner=request.user, name=listName).update(name=newName)
+        except IntegrityError:
+            appStatus = "Edit operation failed. Please make sure that your TodoList name " \
+                        "does not exists in current TodoLists"
+            result = "Fail"
+
     if result == "":
         result = "Success"
     todoLists = models.TodoList.objects.filter(owner=request.user)
@@ -63,7 +73,8 @@ def index(request):
 
 @login_required
 def items(request, listID=None):
-    """List item page that displays entries and related information that specified TodoList contains."""
+    """TodoItem page view that displays related TodoItems and their information, which specified TodoList contains,
+    along with the available operations."""
 
     result = ""
     appStatus = ""
@@ -115,6 +126,16 @@ def items(request, listID=None):
                 appStatus = "Marking operation failed. Please make sure that selected Todo " \
                             "exists in current Todo items."
                 result = "Fail"
+
+    elif request.POST["submit"] == "Edit":
+        itemContent = request.POST['itemContent']
+        newContent = request.POST['newContent']
+        try:
+            models.TodoItem.objects.filter(belongingList_id=listID, content=itemContent).update(content=newContent)
+        except IntegrityError:
+            appStatus = "Create operation failed. Please make sure that your new Todo content " \
+                        "does not exist in current or done Todos."
+            result = "Fail"
 
     elif request.POST["submit"] == "Mark as Done":
         itemContent = request.POST['itemContent']
@@ -171,6 +192,8 @@ def items(request, listID=None):
 
 
 def signup(request):
+    """SignUp page view that signs up new user to the system, according to given information."""
+
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
@@ -186,15 +209,17 @@ def signup(request):
         return render(request, 'signup.html')
 
 
-# Return a TodoList request result in JSON HttpResponse
 def responseTodoLists(result, statusMsg, todoLists):
+    """Helper function for returning a TodoList request result in JSON HttpResponse"""
+
     todoLists = serializers.serialize("json", todoLists)
     return HttpResponse(json.dumps({'result': result, 'appStatus': statusMsg,
                                     'todoLists': todoLists}), 'text/json')
 
 
-# Return a TodoItem request result in JSON HttpResponse
 def responseTodos(result, statusMsg, todos, doneTodos):
+    """Helper function for returning a TodoItem request result in JSON HttpResponse"""
+
     todos = serializers.serialize("json", todos)
     doneTodos = serializers.serialize("json", doneTodos)
     return HttpResponse(json.dumps({'result': result, 'appStatus': statusMsg,

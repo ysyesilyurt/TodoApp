@@ -49,12 +49,15 @@
 						</th>
                         <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
 						</th>
+                        <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+						</th>
 					</tr>
 				</thead>
 				<tbody id="todolist-body">
                      {% for lst in todoLists %}
                             <tr><td>{{ lst.name }}</td><td>{{ lst.todoCount }}</td><td>{{ lst.doneCount }}</td><td>{{ lst.createdWhen }}</td>
-                                <td data-name="del"><button name="del0" class='btn btn-danger glyphicon glyphicon-remove remove-item'></button></td>
+                                <td data-name="edit"><button name="edit" class='btn btn-danger glyphicon glyphicon-edit edit-item'></button></td>
+                                <td data-name="del"><button name="del" class='btn btn-danger glyphicon glyphicon-remove remove-item'></button></td>
                                 <td data-name="goTodos"><a href="/todolist/{{lst.listId}}" class="btn btn-primary">Go to its Todos</a></td></tr>
                      {% endfor %}
 				</tbody>
@@ -72,6 +75,9 @@
     					<td data-name="Creation Date">
 						    <input type="text" name='creationDate' placeholder='Today' class="form-control" readonly/>
 						</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
 					</tr>
                 </tbody>
 			</table>
@@ -84,5 +90,5 @@
 <script src="../static/todoLists.js"></script>
 
 <div id="footer">
-    <p style="text-align: center;"> © 2019 by ysyesilyurt <a href="https://github.com/ysyesilyurt/TodoApp"> Original repository</a></p>
+    <p style="text-align: center;"> MIT © 2019 ysyesilyurt <a href="https://github.com/ysyesilyurt/TodoApp"> Original repository</a></p>
 </div>

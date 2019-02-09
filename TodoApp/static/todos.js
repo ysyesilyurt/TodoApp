@@ -60,6 +60,11 @@ $('.todolist').on('click','.undone-item',function(){
     undoneItem(this);
 });
 
+//edit task from "already done"
+$('.todolist').on('click','.edit-item',function(){
+    editItem(this);
+});
+
 
 // count done tasks
 function countDoneTodos(){
@@ -88,8 +93,10 @@ function createTodo(text){
                 }
                 else
                 {
-                    var markup = '<li class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />'+ text +'</label>' +
-                        '<span class="glyphicon glyphicon-align-justify" style="float: right;"></span></div></li>';
+                    var markup = '<li class="ui-state-default"><div class="checkbox"><label for="addingTodo"><input type="checkbox" value="" />'+ text +'</label>\n' +
+                            '<span class="glyphicon glyphicon-align-justify" style=\'float: right;\'></span>\n' +
+                            '<button style="margin-right: 10px" class="btn btn-default btn-xs pull-right  edit-item"><span class="glyphicon glyphicon-edit"></span></button>\n' +
+                            '</div></li>';
                     $('#not-done-items').append(markup);
                     // Clear prompt
                     $('.add-todo').val('');
@@ -156,8 +163,10 @@ function allDone(allWhat){
 
                     // add to done
                     for (i = 0; i < currentItems.length; i++) {
-                        $('#not-done-items').append('<li class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />'+ currentItems[i] +'</label>' +
-                            '<span class="glyphicon glyphicon-align-justify" style="float: right;"></span></div></li>');
+                        $('#not-done-items').append('<li class="ui-state-default"><div class="checkbox"><label for="addingTodo"><input type="checkbox" value="" />'+ currentItems[i] +'</label>\n' +
+                            '<span class="glyphicon glyphicon-align-justify" style=\'float: right;\'></span>\n' +
+                            '<button style="margin-right: 10px" class="btn btn-default btn-xs pull-right  edit-item"><span class="glyphicon glyphicon-edit"></span></button>\n' +
+                            '</div></li>');
                     }
 
                     // currentItems
@@ -229,12 +238,47 @@ function undoneItem(element){
                         alert(data.appStatus);
                     else
                     {
-                        var markup = '<li class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />'+ undonedItem +'</label>' +
-                            '<span class="glyphicon glyphicon-align-justify" style="float: right;"></span></div></li>';
+                        var markup = '<li class="ui-state-default"><div class="checkbox"><label for="addingTodo"><input type="checkbox" value="" />'+ undonedItem +'</label>\n' +
+                            '<span class="glyphicon glyphicon-align-justify" style=\'float: right;\'></span>\n' +
+                            '<button style="margin-right: 10px" class="btn btn-default btn-xs pull-right  edit-item"><span class="glyphicon glyphicon-edit"></span></button>\n' +
+                            '</div></li>';
                         $('#not-done-items').append(markup);
                         $(element).parent().remove();
                         countTodos();
                         countDoneTodos();
+                    }
+                }
+          );
+}
+
+function editItem(element){
+    var editedItem = $(element).parent().find("label[for =addingTodo]").text();
+    var newItem = prompt("Please enter new content:", editedItem);
+
+    while (newItem == "")
+    {
+        alert("Please specify a valid Todo.");
+        newItem = prompt("Please enter new content:", editedItem);
+    }
+
+    if (newItem == null)
+        return;
+
+    $.post(window.location.pathname,
+            {   csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                'submit': "Edit",
+                'itemContent': editedItem,
+                'newContent': newItem},
+                function (data) {
+                    if (data.result == "Fail")
+                        alert(data.appStatus);
+                    else
+                    {
+                        var markup = '<li class="ui-state-default"><div class="checkbox"><label for="addingTodo"><input type="checkbox" value="" />'+ newItem +'</label>\n' +
+                            '<span class="glyphicon glyphicon-align-justify" style=\'float: right;\'></span>\n' +
+                            '<button style="margin-right: 10px" class="btn btn-default btn-xs pull-right  edit-item"><span class="glyphicon glyphicon-edit"></span></button>\n' +
+                            '</div></li>';
+                        $(element).parent().replaceWith(markup);
                     }
                 }
           );

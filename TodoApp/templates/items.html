@@ -9,16 +9,21 @@
 
 {% csrf_token %}
 
-<p style="text-align:left;">
-<a href="/" class="btn btn-primary" style="margin-left: 10px; margin-top: 10px">Return to your TodoLists</a>
-<span style="float:right; margin-right: 10px; margin-top: 5px">
-    {% if request.user.is_authenticated %}
-        Current User: {{ request.user }}
-        <br>
-        <a href="/accounts/logout?next=/" class="btn btn-danger" style="float: right; margin-top: 10px">Logout</a>
-    {% endif %}
-</span>
-</p>
+<div id="header">
+    <span style="float: left; width: 34%; text-align: left;">
+        <a href="/" class="btn btn-primary" style="margin-left: 10px; margin-top: 10px">Return to your TodoLists</a>
+    </span>
+    <p style="float: left; width: 33%; text-align: center;"> MIT © 2019 ysyesilyurt <a href="https://github.com/ysyesilyurt/TodoApp"> Original repository</a></p>
+    <p style="float: left; width: 33%; text-align: right;">
+        <span style="float:right; margin-right: 10px; margin-top: 5px">
+            {% if request.user.is_authenticated %}
+                Current User: {{ request.user }}
+                <br>
+                <a href="/accounts/logout?next=/" class="btn btn-danger" style="margin-left: 10px; margin-top: 10px">Logout</a>
+            {% endif %}
+        </span>
+    </p>
+</div>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <div class="container">
@@ -32,8 +37,9 @@
                     <hr>
                     <ul id="not-done-items" class="list-unstyled">
                         {% for todo in todos %}
-                            <li class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />{{ todo.content }}</label>
+                            <li class="ui-state-default"><div class="checkbox"><label for="addingTodo"><input type="checkbox" value="" />{{ todo.content }}</label>
                             <span class="glyphicon glyphicon-align-justify" style='float: right;'></span>
+                            <button style="margin-right: 10px" class="btn btn-default btn-xs pull-right  edit-item"><span class="glyphicon glyphicon-edit"></span></button>
                             </div></li>
                         {% endfor %}
                     </ul>
@@ -62,7 +68,3 @@
     </div>
 </div>
 <script src="../static/todos.js"></script>
-
-<div id="footer">
-    <p style="text-align: center;"> © 2019 by ysyesilyurt <a href="https://github.com/ysyesilyurt/TodoApp"> Original repository</a></p>
-</div>
