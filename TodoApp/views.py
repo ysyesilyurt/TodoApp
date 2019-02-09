@@ -72,17 +72,18 @@ def index(request):
 
 
 @login_required
-def items(request, listID=None):
+def todos(request, listID=None):
     """TodoItem page view that displays related TodoItems and their information, which specified TodoList contains,
     along with the available operations."""
 
     result = ""
     appStatus = ""
+    listName = models.TodoList.objects.filter(owner=request.user, listId=listID).values('name')[0]['name']
 
     if request.method == "GET":
         todos = models.TodoItem.objects.filter(belongingList_id=listID, done=False)
         doneTodos = models.TodoItem.objects.filter(belongingList_id=listID, done=True)
-        return render(request, "items.html", {"todos": todos, "doneTodos": doneTodos})
+        return render(request, "todos.html", {"todos": todos, "doneTodos": doneTodos, "listName": listName})
 
     elif request.POST["submit"] == "Create":
         itemContent = request.POST['itemContent']
@@ -188,7 +189,7 @@ def items(request, listID=None):
         result = "Success"
     todos = models.TodoItem.objects.filter(belongingList_id=listID, done=False)
     doneTodos = models.TodoItem.objects.filter(belongingList_id=listID, done=True)
-    return responseTodos(result, appStatus, todos, doneTodos)
+    return responseTodos(result, appStatus, todos, doneTodos, listName)
 
 
 def signup(request):
@@ -217,12 +218,12 @@ def responseTodoLists(result, statusMsg, todoLists):
                                     'todoLists': todoLists}), 'text/json')
 
 
-def responseTodos(result, statusMsg, todos, doneTodos):
+def responseTodos(result, statusMsg, todos, doneTodos, listName):
     """Helper function for returning a TodoItem request result in JSON HttpResponse"""
 
     todos = serializers.serialize("json", todos)
     doneTodos = serializers.serialize("json", doneTodos)
     return HttpResponse(json.dumps({'result': result, 'appStatus': statusMsg,
-                                    'todos': todos, 'doneTodos': doneTodos}), 'text/json')
+                                    'todos': todos, 'doneTodos': doneTodos, 'listName': listName}), 'text/json')
 
 
