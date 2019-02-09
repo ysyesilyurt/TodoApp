@@ -14,6 +14,16 @@ Get started to organize and track your stuff accordingly with Awesome TodoApp!!
 
 Below there are samples from each page
 
+[login]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_login.png 
+[signup]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_signup.png
+[home]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_Home.png
+[todos]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_Todos.png
+
+![alt text][login]
+![alt text][signup]
+
+![alt text][home]
+![alt text][todos]
 
 ### Fundamental Features
 
@@ -64,8 +74,8 @@ Afterwards, go to server address (if you are using your local development server
 If you haven't created an admin account, you can create a user account easily from  ```signup``` page. 
 
 ##Contribution
-Not all cases are covered, weird bugs may appear.
-Feel free to open an issue if you spot a bug. 
+
+Not all cases are covered, weird bugs may appear. Feel free to open an issue if you spot a bug. 
 
 **Have an organized day! :blush:**
 
