@@ -3,7 +3,6 @@ from django.db import models
 from django.utils import timezone
 
 
-
 class TodoList(models.Model):
     """Model definition for TodoLists"""
 
@@ -13,10 +12,11 @@ class TodoList(models.Model):
     doneCount = models.IntegerField()
     createdWhen = models.DateField(default=timezone.now().strftime("%Y-%m-%d"))
 
-    # a Many-to-One relationship with User
+    # a Many-to-One relationship with User Model
     owner = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="owner")
 
     class Meta:
+        # Each TodoList should be unique within its owner
         unique_together = (("listId", "owner"),)
 
     def __str__(self):
@@ -31,7 +31,7 @@ class TodoItem(models.Model):
     content = models.TextField()
     done = models.BooleanField()
 
-    # a Many-to-One relationship with TodoList
+    # a Many-to-One relationship with TodoList Model
     belongingList = models.ForeignKey(TodoList, blank=False, null=False,
                                       on_delete=models.CASCADE, related_name="todoList")
 

@@ -28,6 +28,7 @@ def index(request):
             appStatus = "Please choose a valid TodoList name"
             result = "Fail"
         elif models.TodoList.objects.filter(owner=request.user, name=listName).exists():
+            # User can not create 2 TodoLists with same name
             appStatus = "Please choose a TodoList name which does not exists in your current set of TodoLists."
             result = "Fail"
         else:
