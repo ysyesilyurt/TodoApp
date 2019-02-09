@@ -12,17 +12,27 @@ In ```todos``` page, users can display current not-done to-do's and also the alr
 
 Get started to organize and track your stuff accordingly with Awesome TodoApp!!
 
-Below there are samples from each page
+Below there are samples from each page:
 
 [login]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_login.png 
 [signup]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_signup.png
 [home]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_Home.png
 [todos]: https://github.com/ysyesilyurt/TodoApp/blob/master/images/sample_Todos.png
 
+```login```
+
 ![alt text][login]
+
+```signup```
+
 ![alt text][signup]
 
+```home```
+
 ![alt text][home]
+
+```todos```
+
 ![alt text][todos]
 
 ### Fundamental Features
@@ -73,7 +83,7 @@ Run django server
 Afterwards, go to server address (if you are using your local development server just go to ```localhost:8000```) and login to the application.
 If you haven't created an admin account, you can create a user account easily from  ```signup``` page. 
 
-##Contribution
+## Contribution
 
 Not all cases are covered, weird bugs may appear. Feel free to open an issue if you spot a bug. 
 
