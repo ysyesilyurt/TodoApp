@@ -1,6 +1,6 @@
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
@@ -13,9 +13,9 @@
 
 <div id="header">
     <span style="float: left; width: 34%; text-align: left;">
-            <p class="btn btn-info" style="margin-left: 10px; margin-top: 10px">Version 1.0</p>
+            <p class="btn btn-info" style="margin-left: 10px; margin-top: 10px">TodoApp-Version 1.0</p>
     </span>
-    <h1 style="float: left; width: 33%; text-align: center;">TodoApp</h1>
+    <h1 style="float: left; width: 33%; text-align: center;">{{ request.user }}'s Current TodoLists</h1>
     <p style="float: left; width: 33%; text-align: right;">
         <span style="float:right; margin-right: 10px; margin-top: 5px">
             {% if request.user.is_authenticated %}

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TodoApp.apps.TodoAppConfig',
+    'ordered_model'
 ]
 
 MIDDLEWARE = [

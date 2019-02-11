@@ -22,6 +22,20 @@ def index(request):
         todoLists = models.TodoList.objects.filter(owner=request.user)
         return render(request, "index.html", {"todoLists": todoLists})
 
+    elif request.POST["submit"] == "listSort":
+        listName = request.POST['listName']
+        newIndex = request.POST['newIndex']
+        if listName == "":
+            appStatus = "Please choose a valid TodoList name"
+        else:
+            try:
+                todoList = models.TodoList.objects.filter(owner=request.user).get(name=listName)
+                todoList.to(int(newIndex))
+            except models.TodoList.DoesNotExist:
+                appStatus = "Sorting operation failed. Please make sure that your TodoList name " \
+                            "exists in current TodoLists"
+                result = "Fail"
+
     elif request.POST["submit"] == "Create":
         listName = request.POST['listName']
         if listName == "":
@@ -85,6 +99,26 @@ def todos(request, listID=None):
         todos = models.TodoItem.objects.filter(belongingList_id=listID, done=False)
         doneTodos = models.TodoItem.objects.filter(belongingList_id=listID, done=True)
         return render(request, "todos.html", {"todos": todos, "doneTodos": doneTodos, "listName": listName})
+
+    elif request.POST["submit"] == "itemSort":
+        itemContent = request.POST['itemContent']
+        newIndex = request.POST['newIndex']
+        try:
+            item = models.TodoItem.objects.filter(belongingList_id=listID, content=itemContent)[0]
+            item.to(int(newIndex))
+        except models.TodoItem.DoesNotExist:
+            appStatus = "Sorting operation failed, no TodoItem seems to exist as not done with this content."
+            result = "Fail"
+
+    elif request.POST["submit"] == "doneItemSort":
+        itemContent = request.POST['itemContent']
+        newIndex = request.POST['newIndex']
+        try:
+            item = models.TodoItem.objects.filter(belongingList_id=listID, content=itemContent, done=True)[0]
+            item.to(int(newIndex))
+        except models.TodoItem.DoesNotExist:
+            appStatus = "Deleting all operation failed, no TodoItem seems to exist as done with this content."
+            result = "Fail"
 
     elif request.POST["submit"] == "Create":
         itemContent = request.POST['itemContent']

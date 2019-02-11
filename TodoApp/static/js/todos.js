@@ -1,6 +1,61 @@
-$("#not-done-items").sortable();
+$("#not-done-items").sortable({
+        update: function(event, data) {
+            var sortedItem = data.item.context.innerText;
+            var notDoneItems = [];
+            var newIndex;
+
+            $('#not-done-items li').each(function () {
+                        notDoneItems.push($(this).context.innerText);
+                    });
+
+            for (i = 0; i < notDoneItems.length; i++) {
+                if (notDoneItems[i] == sortedItem) {
+                    newIndex = i;
+                    break;
+                }
+            }
+
+            $.post(window.location.pathname,
+            { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+             'submit': "itemSort",
+             'itemContent': sortedItem,
+             'newIndex': newIndex},
+			function (data) {
+                if (data.result == "Fail")
+                    alert(data.appStatus);
+			});
+        }
+});
 $("#not-done-items").disableSelection();
-$("#done-items").sortable();
+
+$("#done-items").sortable({
+        update: function(event, data) {
+            var sortedItem = data.item.context.innerText;
+            var doneItems = [];
+            var newIndex;
+
+            $('#done-items li').each(function () {
+                        doneItems.push($(this).context.innerText);
+                    });
+
+            for (i = 0; i < doneItems.length; i++) {
+                if (doneItems[i] == sortedItem) {
+                    newIndex = i;
+                    break;
+                }
+            }
+
+            $.post(window.location.pathname,
+            { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+             'submit': "doneItemSort",
+             'itemContent': sortedItem,
+             'newIndex': newIndex},
+			function (data) {
+                if (data.result == "Fail")
+                    alert(data.appStatus);
+			});
+        }
+});
 $("#done-items").disableSelection();
 
 countTodos();
@@ -27,11 +82,11 @@ $("#deleteAllDone").click(function(){
 });
 
 // create new TodoItems after entering the content
-$('.add-todo').on('keypress',function (evnt) {
+$('.add-todo').on('keypress',function (event) {
     // Stop form from submitting normally
-    evnt.preventDefault;
+    event.preventDefault;
     // Create item only if user pressed to 'enter'
-    if (evnt.which == 13) {
+    if (event.which == 13) {
         if($(this).val() != ''){
             var todo = $(this).val();
             createTodo(todo);
@@ -64,7 +119,6 @@ $('.todolist').on('click','.undone-item',function(){
 $('.todolist').on('click','.edit-item',function(){
     editItem(this);
 });
-
 
 // count done tasks
 function countDoneTodos(){

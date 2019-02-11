@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from ordered_model.models import OrderedModel
 
 
-class TodoList(models.Model):
+class TodoList(OrderedModel):
     """Model definition for TodoLists"""
 
     listId = models.IntegerField(primary_key=True)
@@ -15,7 +16,7 @@ class TodoList(models.Model):
     # a Many-to-One relationship with User Model
     owner = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="owner")
 
-    class Meta:
+    class Meta(OrderedModel.Meta):
         # Each TodoList should be unique within its owner
         unique_together = (("listId", "owner"),)
 
@@ -25,7 +26,7 @@ class TodoList(models.Model):
                          ", Belongs to:", str(self.owner.username)])
 
 
-class TodoItem(models.Model):
+class TodoItem(OrderedModel):
     """Model definition for TodoItems"""
 
     content = models.TextField()
@@ -35,7 +36,7 @@ class TodoItem(models.Model):
     belongingList = models.ForeignKey(TodoList, blank=False, null=False,
                                       on_delete=models.CASCADE, related_name="todoList")
 
-    class Meta:
+    class Meta(OrderedModel.Meta):
         # user can not create 2 items with the same content in same TodoList
         unique_together = (("content", "belongingList"),)
 

@@ -1,13 +1,42 @@
-$("#todolist-body").sortable();
+$("#todolist-body").sortable({
+        update: function(event, data) {
+            var listName = data.item.find("td:first").text();
+            var todoLists = [];
+            var newIndex;
+
+            $('#todolist-body tr').each(function () {
+                todoLists.push($(this).context.children[0].innerText);
+            });
+
+            for (i = 0; i < todoLists.length; i++) {
+                if (todoLists[i] == listName) {
+                    newIndex = i;
+                    break;
+                }
+            }
+
+            $.post(window.location.pathname,
+            { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+             'submit': "listSort",
+             'listName': listName,
+             'newIndex': newIndex},
+			function (data) {
+                if (data.result == "Fail")
+                    alert(data.appStatus);
+			});
+        }
+});
 $("#todolist-body").disableSelection();
+
+
 
 countTodoLists();
 
 // create new TodoLists after entering the list name
 $('.add-todo-list').focus();
-$('.add-todo-list').on('keypress',function (evnt) {
-    evnt.preventDefault;
-    if (evnt.which == 13) {
+$('.add-todo-list').on('keypress',function (event) {
+    event.preventDefault;
+    if (event.which == 13) {
         if($(this).val() != ''){
             var todo = $(this).val();
             createTodoList(todo);
