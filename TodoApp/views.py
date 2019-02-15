@@ -27,6 +27,7 @@ def index(request):
         newIndex = request.POST['newIndex']
         if listName == "":
             appStatus = "Please choose a valid TodoList name"
+            result = "Fail"
         else:
             try:
                 todoList = models.TodoList.objects.filter(owner=request.user).get(name=listName)
@@ -62,6 +63,7 @@ def index(request):
         listName = request.POST['listName']
         if listName == "":
             appStatus = "Please choose a valid TodoList name"
+            result = "Fail"
         else:
             try:
                 models.TodoList.objects.filter(owner=request.user).get(name=listName).delete()
