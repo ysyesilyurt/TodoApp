@@ -1,30 +1,23 @@
 $("#todolist-body").sortable({
-        update: function(event, data) {
-            var listName = data.item.find("td:first").text();
-            var todoLists = [];
-            var newIndex;
+    update: function(event, data) {
+        var currentItems = "";
 
-            $('#todolist-body tr').each(function () {
-                todoLists.push($(this).context.children[0].innerText);
-            });
+        $('#todolist-body tr').each(function () {
+            currentItems += $(this).context.children[0].innerText + ',';
+        });
 
-            for (i = 0; i < todoLists.length; i++) {
-                if (todoLists[i] == listName) {
-                    newIndex = i;
-                    break;
-                }
-            }
+        var orderList = JSON.stringify(currentItems.slice(0,-1));
 
-            $.post(window.location.pathname,
-            { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
-             'submit': "listSort",
-             'listName': listName,
-             'newIndex': newIndex},
-			function (data) {
-                if (data.result == "Fail")
-                    alert(data.appStatus);
-			});
-        }
+        $.post(window.location.pathname,
+        { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+         'submit': "listSort",
+         'orderList': orderList},
+        function (data) {
+            if (data.result == "Fail")
+                alert(data.appStatus);
+        });
+
+    }
 });
 $("#todolist-body").disableSelection();
 

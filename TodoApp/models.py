@@ -1,10 +1,15 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
-from ordered_model.models import OrderedModel
 
 
-class TodoList(OrderedModel):
+class Owner(User):
+    """Inherited Model definition for Owners"""
+
+    orderList = models.TextField(default="")
+
+
+class TodoList(models.Model):
     """Model definition for TodoLists"""
 
     listId = models.IntegerField(primary_key=True)
@@ -13,10 +18,13 @@ class TodoList(OrderedModel):
     doneCount = models.IntegerField()
     createdWhen = models.DateField(default=timezone.now().strftime("%Y-%m-%d"))
 
-    # a Many-to-One relationship with User Model
-    owner = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="owner")
+    todoOrderList = models.TextField(default="")
+    doneOrderList = models.TextField(default="")
 
-    class Meta(OrderedModel.Meta):
+    # a Many-to-One relationship with User Model
+    owner = models.ForeignKey(Owner, blank=False, null=False, on_delete=models.CASCADE, related_name="Owner")
+
+    class Meta:
         # Each TodoList should be unique within its owner
         unique_together = (("listId", "owner"),)
 
@@ -26,7 +34,7 @@ class TodoList(OrderedModel):
                          ", Belongs to:", str(self.owner.username)])
 
 
-class TodoItem(OrderedModel):
+class TodoItem(models.Model):
     """Model definition for TodoItems"""
 
     content = models.TextField()
@@ -36,7 +44,7 @@ class TodoItem(OrderedModel):
     belongingList = models.ForeignKey(TodoList, blank=False, null=False,
                                       on_delete=models.CASCADE, related_name="todoList")
 
-    class Meta(OrderedModel.Meta):
+    class Meta:
         # user can not create 2 items with the same content in same TodoList
         unique_together = (("content", "belongingList"),)
 

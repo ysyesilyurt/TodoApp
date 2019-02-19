@@ -1,60 +1,47 @@
 $("#not-done-items").sortable({
-        update: function(event, data) {
-            var sortedItem = data.item.context.innerText;
-            var notDoneItems = [];
-            var newIndex;
+    update: function(event, data) {
+        var notDoneItems = "";
 
-            $('#not-done-items li').each(function () {
-                        notDoneItems.push($(this).context.innerText);
-                    });
+        $('#not-done-items li').each(function () {
+            notDoneItems += $(this).context.innerText + ',';
+        });
 
-            for (i = 0; i < notDoneItems.length; i++) {
-                if (notDoneItems[i] == sortedItem) {
-                    newIndex = i;
-                    break;
-                }
-            }
+        var orderList = JSON.stringify(notDoneItems.slice(0,-1));
 
-            $.post(window.location.pathname,
-            { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
-             'submit': "itemSort",
-             'itemContent': sortedItem,
-             'newIndex': newIndex},
-			function (data) {
-                if (data.result == "Fail")
-                    alert(data.appStatus);
-			});
-        }
+        $.post(window.location.pathname,
+        { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+         'submit': "itemSort",
+         'orderList': orderList},
+        function (data) {
+            if (data.result == "Fail")
+                alert(data.appStatus);
+        });
+
+    }
+
 });
 $("#not-done-items").disableSelection();
 
 $("#done-items").sortable({
-        update: function(event, data) {
-            var sortedItem = data.item.context.innerText;
-            var doneItems = [];
-            var newIndex;
+    update: function(event, data) {
+        var doneItems = "";
 
-            $('#done-items li').each(function () {
-                        doneItems.push($(this).context.innerText);
-                    });
+        $('#done-items li').each(function () {
+            doneItems += $(this).context.innerText + ',';
+        });
 
-            for (i = 0; i < doneItems.length; i++) {
-                if (doneItems[i] == sortedItem) {
-                    newIndex = i;
-                    break;
-                }
-            }
+        var orderList = JSON.stringify(doneItems.slice(0,-1));
 
-            $.post(window.location.pathname,
-            { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
-             'submit': "doneItemSort",
-             'itemContent': sortedItem,
-             'newIndex': newIndex},
-			function (data) {
-                if (data.result == "Fail")
-                    alert(data.appStatus);
-			});
-        }
+        $.post(window.location.pathname,
+        { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+         'submit': "doneItemSort",
+         'orderList': orderList},
+        function (data) {
+            if (data.result == "Fail")
+                alert(data.appStatus);
+        });
+
+    }
 });
 $("#done-items").disableSelection();
 
@@ -263,7 +250,8 @@ function deleteAll(deleteWhat){
 }
 
 function removeItem(element){
-    var removedItem = $(element).parent().text().replace(/\n/g, '');
+    var removedItem = $(element).parent().text().replace(/\n/g, '').trim();
+    console.log(removedItem);
     $.post(window.location.pathname,
             {   csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
                 'submit': "Delete",
@@ -282,7 +270,7 @@ function removeItem(element){
 }
 
 function undoneItem(element){
-    var undonedItem = $(element).parent().text().replace(/\n/g, '');
+    var undonedItem = $(element).parent().text().replace(/\n/g, '').trim();
     $.post(window.location.pathname,
             {   csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
                 'submit': "Undone",

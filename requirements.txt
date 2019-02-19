@@ -1,3 +1,2 @@
 Django~=2.1
-django-ordered-model~=3.1
 pytz~=2018.9
